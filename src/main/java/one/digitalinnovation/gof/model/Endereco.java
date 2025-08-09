@@ -2,109 +2,101 @@ package one.digitalinnovation.gof.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
+
+import one.digitalinnovation.gof.service.dto.EnderecoDTO;
 
 /**
- * Os atributos desse modelo foram gerados automaticamente pelo site
- * jsonschema2pojo.org. Para isso, usamos o JSON de retorno da API do ViaCEP.
+ * Entidade Endereco persistida no banco de dados.
  * 
- * @see <a href="https://www.jsonschema2pojo.org">jsonschema2pojo.org</a>
- * @see <a href="https://viacep.com.br">ViaCEP</a>
+ * Padrões aplicados:
+ * - Entity (JPA)
+ * - Data Mapper (Hibernate mapeia para a tabela correspondente)
  * 
- * @author falvojr
+ * Observação:
+ * - O mapeamento da API externa (ViaCEP) para esta entidade deve ser feito
+ *   via DTO e Mapper, evitando acoplamento direto.
  */
 @Entity
 public class Endereco {
 
-	@Id
-	private String cep;
-	private String logradouro;
-	private String complemento;
-	private String bairro;
-	private String localidade;
-	private String uf;
-	private String ibge;
-	private String gia;
-	private String ddd;
-	private String siafi;
+    @Id
+    @NotBlank(message = "O CEP é obrigatório.")
+    @Pattern(regexp = "\\d{8}", message = "O CEP deve conter exatamente 8 dígitos numéricos.")
+    @Size(min = 8, max = 8)
+    private String cep;
 
-	public String getCep() {
-		return cep;
-	}
+    private String logradouro;
+    private String complemento;
+    private String bairro;
+    private String localidade;
+    private String uf;
+    private String ibge;
+    private String gia;
+    private String ddd;
+    private String siafi;
 
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
+    public Endereco() {
+    }
 
-	public String getLogradouro() {
-		return logradouro;
-	}
+    // Construtor de conveniência para conversão de DTO
+    public Endereco(EnderecoDTO dto) {
+        this.cep = dto.getCep();
+        this.logradouro = dto.getLogradouro();
+        this.complemento = dto.getComplemento();
+        this.bairro = dto.getBairro();
+        this.localidade = dto.getLocalidade();
+        this.uf = dto.getUf();
+        this.ibge = dto.getIbge();
+        this.gia = dto.getGia();
+        this.ddd = dto.getDdd();
+        this.siafi = dto.getSiafi();
+    }
 
-	public void setLogradouro(String logradouro) {
-		this.logradouro = logradouro;
-	}
+    // Getters e Setters
+    public String getCep() { return cep; }
+    public void setCep(String cep) { this.cep = cep; }
 
-	public String getComplemento() {
-		return complemento;
-	}
+    public String getLogradouro() { return logradouro; }
+    public void setLogradouro(String logradouro) { this.logradouro = logradouro; }
 
-	public void setComplemento(String complemento) {
-		this.complemento = complemento;
-	}
+    public String getComplemento() { return complemento; }
+    public void setComplemento(String complemento) { this.complemento = complemento; }
 
-	public String getBairro() {
-		return bairro;
-	}
+    public String getBairro() { return bairro; }
+    public void setBairro(String bairro) { this.bairro = bairro; }
 
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
+    public String getLocalidade() { return localidade; }
+    public void setLocalidade(String localidade) { this.localidade = localidade; }
 
-	public String getLocalidade() {
-		return localidade;
-	}
+    public String getUf() { return uf; }
+    public void setUf(String uf) { this.uf = uf; }
 
-	public void setLocalidade(String localidade) {
-		this.localidade = localidade;
-	}
+    public String getIbge() { return ibge; }
+    public void setIbge(String ibge) { this.ibge = ibge; }
 
-	public String getUf() {
-		return uf;
-	}
+    public String getGia() { return gia; }
+    public void setGia(String gia) { this.gia = gia; }
 
-	public void setUf(String uf) {
-		this.uf = uf;
-	}
+    public String getDdd() { return ddd; }
+    public void setDdd(String ddd) { this.ddd = ddd; }
 
-	public String getIbge() {
-		return ibge;
-	}
+    public String getSiafi() { return siafi; }
+    public void setSiafi(String siafi) { this.siafi = siafi; }
 
-	public void setIbge(String ibge) {
-		this.ibge = ibge;
-	}
+    // Implementação de equals e hashCode com base no CEP (chave primária)
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Endereco)) return false;
+        Endereco that = (Endereco) o;
+        return cep != null && cep.equals(that.cep);
+    }
 
-	public String getGia() {
-		return gia;
-	}
-
-	public void setGia(String gia) {
-		this.gia = gia;
-	}
-
-	public String getDdd() {
-		return ddd;
-	}
-
-	public void setDdd(String ddd) {
-		this.ddd = ddd;
-	}
-
-	public String getSiafi() {
-		return siafi;
-	}
-
-	public void setSiafi(String siafi) {
-		this.siafi = siafi;
-	}
-
+    @Override
+    public int hashCode() {
+        return 31;
+    }
 }

@@ -5,14 +5,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 public class Cliente {
 
-	@Id
+@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+
+	@NotBlank(message = "O nome não pode estar vazio.")
 	private String nome;
+
 	@ManyToOne
 	private Endereco endereco;
 
